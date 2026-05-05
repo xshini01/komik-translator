@@ -108,6 +108,7 @@ def predict(
     source_language: str,
     font_name: str,
     api_key: str | None = None,
+    jpeg_quality: int = 85,
     progress=gr.Progress(track_tqdm=True),
 ) -> tuple:
     source_dir = "folder_ekstrak"
@@ -241,7 +242,7 @@ def predict(
         print(f"[app] {len(errors)} file(s) had errors:\n" + "\n".join(errors))
 
     try:
-        pdf_path = compress_toPDF()
+        pdf_path = compress_toPDF(jpeg_quality=int(jpeg_quality))
     except RuntimeError as e:
         print(f"[app] PDF generation failed: {e}")
         pdf_path = None
@@ -360,6 +361,15 @@ def main():
                     value="animeace_i",
                     interactive=True,
                 )
+                jpeg_quality_slider = gr.Slider(
+                    minimum=50,
+                    maximum=95,
+                    value=85,
+                    step=5,
+                    label="Kualitas PDF (JPEG)",
+                    info="85 = seimbang. Turunkan untuk file lebih kecil, naikkan untuk kualitas lebih tinggi.",
+                    interactive=True,
+                )
 
             # --- Right panel: outputs ---
             with gr.Column(variant="panel"):
@@ -382,7 +392,7 @@ def main():
         input_mode.change(show_mode, inputs=input_mode, outputs=[content_link, content_file])
         input_tl_method.change(api_visibility, inputs=input_tl_method, outputs=deepl_api)
 
-        common_inputs = [input_model, input_tl_method, input_source_lang, input_font, deepl_api]
+        common_inputs = [input_model, input_tl_method, input_source_lang, input_font, deepl_api, jpeg_quality_slider]
         common_outputs = [ori_imgs, result_imgs, result_file]
 
         button_link.click(
