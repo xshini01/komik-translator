@@ -1,0 +1,24 @@
+# Core
+gradio
+deep-translator
+ultralytics
+google-genai
+rarfile
+img2pdf
+pdf2image
+natsort
+opencv-python
+Pillow
+tqdm
+
+# OCR (local fallback — only needed if no Gemini token)
+qwen-vl-utils
+transformers
+torch
+accelerate
+
+# Manga downloader
+mangadex-downloader
+
+# Optional: DeepL translation
+# deepl  # uncomment if using DeepL API
